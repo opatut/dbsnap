@@ -2,10 +2,11 @@
 
 import unicodedata, argparse, os, time, sys, re, subprocess, shutil
 from urllib.parse import urlparse
-from xdg.BaseDirectory import xdg_data_home
+from appdirs import AppDirs
 
 # determine and create root directory
-root_dir = os.path.join(xdg_data_home, 'dbsnap')
+dirs = AppDirs("dbsnap", "opatut")
+root_dir = dirs.user_data_dir
 os.makedirs(root_dir, exist_ok=True)
 current_url_file = os.path.join(root_dir, 'current')
 

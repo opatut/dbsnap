@@ -2,7 +2,10 @@
 
 ## Installation
 
-Just copy `dbsnap.py` somewhere into your $PATH, e.g. to `/usr/local/bin`, and make sure it is executable.
+1. Clone to somewhere.
+2. (optional) Create a virtual environment
+3. `pip install -r requirements.txt` or with `--user` when running without virtualenv
+4. Symlink `dbsnap.py` to your $PATH, e.g. `ln -s $PWD/dbsnap.py /usr/local/bin/dbsnap`
 
 ## Usage
 
