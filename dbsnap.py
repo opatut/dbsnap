@@ -100,24 +100,6 @@ def create(args):
     proc.communicate()
     print("Created: {}".format(filename))
 
-def create(args):
-    connection = get_connection(True)
-    filename = re.sub(r'(\.sql)?$', '.sql', args.name) \
-            if args.name else \
-            ("{}-{}.sql".format(time.strftime("%Y%m%d-%H%M%S"), slug(connection['name'])))
-
-    filepath = os.path.join(connection['snapshot_dir'], filename)
-
-    cmd = "mysqldump {args} --databases {name} --add-drop-database > {filepath}".format(
-            args=build_mysql_args(connection),
-            name=connection['name'],
-            filepath=filepath
-    )
-
-    proc = subprocess.Popen(cmd, shell=True)
-    proc.communicate()
-    print("Created: {}".format(filename))
-
 
 def restore(args):
     connection = get_connection(True)
