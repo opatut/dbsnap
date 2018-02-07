@@ -3,9 +3,8 @@
 ## Installation
 
 1. Clone to somewhere.
-2. (optional) Create a virtual environment
-3. `pip install -r requirements.txt` or with `--user` when running without virtualenv
-4. Symlink `dbsnap.py` to your $PATH, e.g. `ln -s $PWD/dbsnap.py /usr/local/bin/dbsnap`
+2. `pip install --user -r requirements.txt`
+3. Symlink `dbsnap.py` to your $PATH, e.g. `ln -s $PWD/dbsnap.py /usr/local/bin/dbsnap`
 
 ## Usage
 
