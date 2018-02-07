@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import unicodedata, argparse, os, time, sys, re, subprocess, shutil
+import unicodedata, argparse, os, time, sys, re, subprocess, shutil, shlex
 from urllib.parse import urlparse
 from appdirs import AppDirs
 
@@ -9,6 +9,8 @@ dirs = AppDirs("dbsnap", "opatut")
 root_dir = dirs.user_data_dir
 os.makedirs(root_dir, exist_ok=True)
 current_url_file = os.path.join(root_dir, 'current')
+
+q = shlex.quote
 
 def parse_connection_string(url):
     r = urlparse(url)
@@ -28,14 +30,14 @@ def parse_connection_string(url):
 
 def build_mysql_args(connection):
     s = ""
-    if connection['username']: s += "-u " + connection['username'] + " "
+    if connection['username']: s += "-u " + q(connection['username']) + " "
     if connection['password'] != None: 
         if connection['password']: 
-            s += "-p=" + connection['password'] + " "
+            s += "-p=" + q(connection['password']) + " "
         else:
             s += '-p '
 
-    if connection['hostname']: s += "-h " + connection['hostname'] + " "
+    if connection['hostname']: s += "-h " + q(connection['hostname']) + " "
     if connection['port']: s += "--port " + str(connection['port']) + " "
     return s.strip()
 
@@ -92,8 +94,8 @@ def create(args):
 
     cmd = "mysqldump {args} --databases {name} --add-drop-database > {filepath}".format(
             args=build_mysql_args(connection),
-            name=connection['name'],
-            filepath=filepath
+            name=q(connection['name']),
+            filepath=q(filepath)
     )
 
     proc = subprocess.Popen(cmd, shell=True)
@@ -120,8 +122,8 @@ def restore(args):
 
     cmd = "mysql {args} {name} < {filepath}".format(
             args=build_mysql_args(connection),
-            name=connection['name'],
-            filepath=filepath
+            name=q(connection['name']),
+            filepath=q(filepath),
     )
 
     proc = subprocess.Popen(cmd, shell=True)
