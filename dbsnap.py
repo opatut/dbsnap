@@ -33,7 +33,7 @@ def build_mysql_args(connection):
     if connection['username']: s += "-u " + q(connection['username']) + " "
     if connection['password'] != None: 
         if connection['password']: 
-            s += "-p=" + q(connection['password']) + " "
+            s += "-p" + q(connection['password']) + " "
         else:
             s += '-p '
 
@@ -92,8 +92,13 @@ def create(args):
 
     filepath = os.path.join(connection['snapshot_dir'], filename)
 
-    cmd = "mysqldump {args} --databases {name} --add-drop-database > {filepath}".format(
-            args=build_mysql_args(connection),
+    mysql_args = build_mysql_args(connection)
+
+    if args.schema:
+        mysql_args += ' --no-data'
+
+    cmd = "mysqldump {mysql_args} --databases {name} --add-drop-database > {filepath}".format(
+            mysql_args=mysql_args,
             name=q(connection['name']),
             filepath=q(filepath)
     )
@@ -145,6 +150,7 @@ connect_parser.set_defaults(cmd=connect)
  
 create_parser = subparsers.add_parser('create', aliases=['snap'], help='create a snapshot')
 create_parser.add_argument('-n', '--name', help='snapshot name')
+create_parser.add_argument('-s', '--schema', help='store only schema', action='store_true', dest='schema')
 create_parser.set_defaults(cmd=create)
 
 restore_parser = subparsers.add_parser('restore', help="restore a snapshot")
